@@ -113,3 +113,62 @@ join category c
 on c.category_id = fc.category_id
 where c.name = 'family';
 
+select f.title, r.rental_date
+from film f
+join inventory i
+on f.film_id = i.film_id
+join rental r
+on i.inventory_id = r.inventory_id
+order by r.rental_date desc;
+
+select i.store_id, sum(p.amount)
+from payment p
+join
+rental r
+on r.rental_id=p.rental_id
+join inventory i
+on i.inventory_id = r.inventory_id
+group by i.store_id;
+
+
+select s.store_id, c.city, co.country
+from store s
+join address a
+on s.address_id = a.address_id
+join city c
+on a.city_id = c.city_id
+join country co
+on c.country_id = co.country_id;
+
+select category.name, sum(payment.amount)
+from category 
+join film_category fc
+on category.category_id = fc.category_id
+join inventory i
+on fc.film_id = i.film_id
+join rental r
+on i.inventory_id = r.inventory_id
+join payment
+on r.rental_id = payment.rental_id
+group by category.name
+order by sum(payment.amount) desc
+limit 5;
+
+Create view Top_Five_Genres as
+select category.name, sum(payment.amount)
+from category 
+join film_category fc
+on category.category_id = fc.category_id
+join inventory i
+on fc.film_id = i.film_id
+join rental r
+on i.inventory_id = r.inventory_id
+join payment
+on r.rental_id = payment.rental_id
+group by category.name
+order by sum(payment.amount) desc
+limit 5;
+
+Select * from Top_Five_Genres;
+
+Drop view Top_Five_Genres;
